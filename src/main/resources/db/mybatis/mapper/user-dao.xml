@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.gznznzjsn.userservice.repository.UserDao">
+
+    <resultMap id="UserResultMap" type="User" autoMapping="false">
+        <id column="user_id" property="id"/>
+        <result column="user_name" property="name"/>
+        <result column="user_email" property="email"/>
+        <result column="user_password" property="password"/>
+        <result column="user_role" property="role"/>
+    </resultMap>
+
+    <sql id="base_column_list">
+        user_id as "user_id", name as "user_name", email as "user_email", password as "user_password", value as "user_role"
+    </sql>
+
+    <select id="findById" resultMap="UserResultMap">
+        SELECT
+        <include refid="base_column_list"/>
+        FROM users JOIN roles r on users.role_id = r.role_id
+        WHERE user_id=#{userId}
+    </select>
+
+    <select id="findByEmail" resultMap="UserResultMap">
+        SELECT
+        <include refid="base_column_list"/>
+        FROM users JOIN roles r on r.role_id = users.role_id
+        WHERE email=#{email}
+    </select>
+
+    <insert id="create" keyProperty="id" keyColumn="user_id" useGeneratedKeys="true">
+        INSERT INTO users (name, email, password, role_id)
+        VALUES (#{name}, #{email}, #{password},
+                (SELECT role_id FROM roles WHERE value = #{role}));
+    </insert>
+
+</mapper>
+
+

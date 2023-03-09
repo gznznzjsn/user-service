@@ -1,1 +1,29 @@
+spring:
+  application:
+    name: user-service
+  config:
+    import: optional:.env[.properties]
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+server:
+  port: 0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE-URL}
+  instance:
+    prefer-ip-address: true
+
+mybatis:
+  config-location: classpath:db/mybatis/mybatis-config.xml
+  mapper-locations: classpath:db/mybatis/mapper/*.xml
+  type-aliases-package: com.gznznzjsn.userservice.domain
+
+user-service:
+  secrets:
+    access-key: ${USER-SERVICE_SECRETS_ACCESS-KEY}
+    refresh-key: ${USER-SERVICE_SECRETS_REFRESH-KEY}
 
